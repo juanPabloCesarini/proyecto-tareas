@@ -1,109 +1,126 @@
-```php
 <?php require RUTA_APP . "/views/layout/landing/header.php"; ?>
 
-<div class="container">
+<main class="container py-5">
 
-    <!-- Outer Row -->
     <div class="row justify-content-center">
 
-        <div class="col-xl-10 col-lg-12 col-md-9">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
-            <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card border-0 shadow">
 
-                <div class="card-body p-0">
+                <div class="card-body p-4 p-md-5">
 
-                    <!-- Nested Row within Card Body -->
-                    <div class="row">
+                    <div class="text-center mb-4">
 
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <h1 class="h3 fw-bold mb-2">
+                            Ingresar
+                        </h1>
 
-                        <div class="col-lg-6">
+                        <p class="text-body-secondary mb-0">
+                            Ingresá a tu cuenta para administrar tus tareas.
+                        </p>
 
-                            <div class="p-5">
+                    </div>
 
-                                <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Ingresar</h1>
-                                </div>
+                    <form
+                        id="formLogin"
+                        action="<?php echo RUTA_URL; ?>/AuthController/loginUsuario/"
+                        method="POST"
+                    >
 
-                                <form
-                                    id="formLogin"
-                                    class="user"
-                                    action="<?php echo RUTA_URL; ?>/AuthController/loginUsuario/"
-                                    method="POST"
-                                >
+                        <div class="mb-3">
 
-                                    <div class="form-group">
-                                        <input
-                                            name="email"
-                                            type="email"
-                                            class="form-control form-control-user"
-                                            id="exampleInputEmail"
-                                            aria-describedby="emailHelp"
-                                            placeholder="Email"
-                                        >
-                                    </div>
+                            <label
+                                for="exampleInputEmail"
+                                class="form-label"
+                            >
+                                Email
+                            </label>
 
-                                    <div class="form-group">
-                                        <input
-                                            name="password"
-                                            type="password"
-                                            class="form-control form-control-user"
-                                            id="exampleInputPassword"
-                                            placeholder="Password"
-                                        >
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-
-                                            <input
-                                                type="checkbox"
-                                                class="custom-control-input"
-                                                id="customCheck"
-                                            >
-
-                                            <label
-                                                class="custom-control-label"
-                                                for="customCheck"
-                                            >
-                                                Recordame
-                                            </label>
-
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-primary btn-user btn-block"
-                                    >
-                                        Login
-                                    </button>
-
-                                </form>
-
-                                <hr>
-
-                                <div class="text-center">
-                                    <a
-                                        class="small"
-                                        href="<?php echo RUTA_URL; ?>/AuthController/resetPassword"
-                                    >
-                                        Olvidé mi contraseña
-                                    </a>
-                                </div>
-
-                                <div class="text-center">
-                                    <a
-                                        class="small"
-                                        href="<?php echo RUTA_URL; ?>/AuthController/register"
-                                    >
-                                        Soy Nuevo
-                                    </a>
-                                </div>
-
-                            </div>
+                            <input
+                                name="email"
+                                type="email"
+                                class="form-control"
+                                id="exampleInputEmail"
+                                placeholder="tu@email.com"
+                                autocomplete="email"
+                                required
+                            >
 
                         </div>
+
+                        <div class="mb-3">
+
+                            <label
+                                for="exampleInputPassword"
+                                class="form-label"
+                            >
+                                Contraseña
+                            </label>
+
+                            <input
+                                name="password"
+                                type="password"
+                                class="form-control"
+                                id="exampleInputPassword"
+                                placeholder="Ingresá tu contraseña"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="form-check mb-4">
+
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                id="customCheck"
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="customCheck"
+                            >
+                                Recordame
+                            </label>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        >
+                            Ingresar
+                        </button>
+
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center mb-2">
+
+                        <a
+                            href="<?php echo RUTA_URL; ?>/AuthController/resetPassword"
+                            class="text-decoration-none"
+                        >
+                            ¿Olvidaste tu contraseña?
+                        </a>
+
+                    </div>
+
+                    <div class="text-center">
+
+                        <span class="text-body-secondary">
+                            ¿Todavía no tenés una cuenta?
+                        </span>
+
+                        <a
+                            href="<?php echo RUTA_URL; ?>/AuthController/register"
+                            class="text-decoration-none fw-semibold"
+                        >
+                            Registrate
+                        </a>
 
                     </div>
 
@@ -115,7 +132,6 @@
 
     </div>
 
-</div>
+</main>
 
 <?php require RUTA_APP . "/views/layout/landing/footer.php"; ?>
-```

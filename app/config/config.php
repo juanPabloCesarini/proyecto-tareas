@@ -9,12 +9,12 @@
    define('RUTA_APP', dirname(dirname(__FILE__)));
    // Ruta url
 
-   define('RUTA_URL','http://localhost/proyecto_tareas');
+   define('RUTA_URL','http://localhost/proyecto-tareas');
 
    // Ruta de los recursos públicos
    
 
    // Rutas que se usan para guardar imágenes
-   define('RUTA_AVATAR','/proyecto_tareas/public/img/avatar/');
+   define('RUTA_AVATAR','/proyecto-tareas/public/img/avatar/');
    define('NOMBRESITIO','Administrador de tareas');
 ?>
