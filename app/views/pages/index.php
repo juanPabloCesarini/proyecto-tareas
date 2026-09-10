@@ -90,10 +90,7 @@
     </section>
 
 </main>
-<pre>
-    <?php echo "RUTA_APP: " . RUTA_APP . "<br>"; ?>
-    <?php echo "RUTA_URL: " . RUTA_URL . "<br>"; ?>
-</pre>
+
 
 <?php require RUTA_APP . '/views/layout/landing/footer.php'; ?>
 
