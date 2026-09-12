@@ -1,5 +1,5 @@
 
-import { iniciarAuth } from './out/auth.js';
+import { iniciarAuth } from './modules/auth.js';
 
 iniciarAuth();
 

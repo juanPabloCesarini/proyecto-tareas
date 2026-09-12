@@ -1,22 +1,19 @@
 <?php
 session_start();
-  
-  
-  
-  // se cargan las librerías
-  require_once 'config/config.php';
 
-  //require_once "lib/Base.php";
-  //require_once "lib/Controller.php";
-  //require_once "lib/Core.php";
+// 1. Cargar la clase Env
+require_once 'config/Env.php';
 
-  // Cargando helpers
-  require_once 'helpers/password_creator.php';
+// 2. Cargar el archivo .env desde la raíz del proyecto (un nivel arriba de /app)
+Env::cargar(dirname(__DIR__) . '/.env');
 
-  // autoload php
+// 3. Cargar las configuraciones generales
+require_once 'config/config.php';
 
-  spl_autoload_register(function($className){
-    require_once 'core/'.$className.'.php';
-  });
-  
-?>
+// 4. Cargando helpers
+require_once 'helpers/password_creator.php';
+
+// 5. Autoload de clases core
+spl_autoload_register(function($className){
+    require_once 'core/' . $className . '.php';
+});
