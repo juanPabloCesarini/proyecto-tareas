@@ -20,10 +20,16 @@ export const httpClient = async (endpoint, options = {}) => {
   try {
     const response = await fetch(url, config);
 
+    // Leer respuesta bruta como texto
+    const rawText = await response.text();
+    console.log("Respuesta RAW del Servidor:", rawText);
+
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
-    return await response.json();
+
+    // Intentar convertir el texto a JSON
+    return JSON.parse(rawText);
   } catch (error) {
     console.error("HTTP Client Error:", error);
     throw error;

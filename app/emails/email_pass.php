@@ -15,7 +15,8 @@ $new_pass = create_pass(8);
 $this->authModel->change_pass($new_pass, $destinatario);
 
 // 3. Definir plantilla HTML estilizada
-$link = RUTA_URL . "/AuthController/update_pass/";
+$link = RUTA_URL . "/update-password";
+
 
 $body = "
 <!DOCTYPE html>

@@ -1,26 +1,30 @@
 /**
- * Componente UI: Toggle Password Visibility
- * Alterna el tipo de input (password/text) y la clase del icono de Bootstrap Icons
+ * Inicializa el toggle de contraseña delimitado al contenedor del formulario activo.
+ * @param {HTMLElement} containerElement - El contenedor (ej: #formRegister, #formLogin)
  */
-export const initTogglePassword = () => {
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-toggle-password");
-    if (!btn) return;
+export const initPasswordToggle = (containerElement) => {
+  if (!containerElement) return;
+
+  containerElement.addEventListener("click", (e) => {
+    const button = e.target.closest(".btn-toggle-password");
+    if (!button) return;
 
     e.preventDefault();
 
-    const container = btn.closest(".input-group");
-    const input = container ? container.querySelector("input") : null;
-    const icon = btn.querySelector("i");
+    const group = button.closest(".input-group");
+    if (!group) return;
 
-    if (!input || !icon) return;
+    const input = group.querySelector("input");
+    const icon = button.querySelector("i");
 
-    if (input.type === "password") {
-      input.type = "text";
-      icon.classList.replace("bi-eye", "bi-eye-slash");
-    } else {
-      input.type = "password";
-      icon.classList.replace("bi-eye-slash", "bi-eye");
+    if (input) {
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+
+      if (icon) {
+        icon.classList.toggle("bi-eye", !isPassword);
+        icon.classList.toggle("bi-eye-slash", isPassword);
+      }
     }
   });
 };

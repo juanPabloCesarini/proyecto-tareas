@@ -1,30 +1,40 @@
-// public/js/services/authService.js
 import { httpClient } from "../utils/httpClient.js";
 
 export const authService = {
-  login: async (datos) => {
-    return await httpClient("/AuthController/loginUsuario", {
+  checkSession: async () => {
+    return await httpClient("/api/auth/check-session");
+  },
+
+  login: async (credentials) => {
+    return await httpClient("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify(datos),
+      body: JSON.stringify(credentials),
     });
   },
 
-  recuperarPassword: async (email) => {
-    return await httpClient("/AuthController/enviar_password", {
+  register: async (data) => {
+    return await httpClient("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  resetPassword: async (email) => {
+    return await httpClient("/api/auth/reset-password", {
       method: "POST",
       body: JSON.stringify({ email }),
     });
   },
 
-  actualizarPassword: async (datos) => {
-    return await httpClient("/AuthController/actualizar_password", {
-      method: "POST",
-      body: JSON.stringify(datos),
+  updatePassword: async (data) => {
+    return await httpClient("/api/auth/update-password", {
+      method: "PUT",
+      body: JSON.stringify(data),
     });
   },
 
   logout: async () => {
-    return await httpClient("/AuthController/logout", {
+    return await httpClient("/api/auth/logout", {
       method: "POST",
     });
   },

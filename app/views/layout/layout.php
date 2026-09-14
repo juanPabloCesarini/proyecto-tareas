@@ -9,10 +9,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <!-- Estilos Custom -->
-    <link href="<?php echo RUTA_URL; ?>/public/css/estilos.css" rel="stylesheet">
+    <link href="<?php echo RUTA_URL; ?>/css/estilos.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
@@ -25,7 +27,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    <!-- JS Principal de la SPA -->
-    <script type="module" src="<?php echo RUTA_URL; ?>/public/js/main.js"></script>
+    <!-- JS Principal de la SPA (Asegurar que apunte a app.js) -->
+    <script type="module" src="<?php echo RUTA_URL; ?>/js/app.js"></script>
 </body>
 </html>
