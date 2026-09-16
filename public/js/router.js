@@ -1,4 +1,5 @@
 import { renderHome } from "./modules/home.js";
+
 import {
   renderLogin,
   renderResetPassword,
@@ -6,12 +7,15 @@ import {
   renderUpdatePassword,
 } from "./modules/auth/index.js";
 
+import { renderDashboard } from "./modules/dashboard.js";
+
 const routes = {
   "/": renderHome,
   "/login": renderLogin,
   "/register": renderRegister,
   "/reset-password": renderResetPassword,
   "/update-password": renderUpdatePassword,
+  "/dashboard": renderDashboard,
 };
 
 const getNormalizedPath = () => {
@@ -20,6 +24,7 @@ const getNormalizedPath = () => {
 
   if (path.startsWith(basePath)) {
     const route = path.replace(basePath, "");
+
     return route === "" ? "/" : route;
   }
 
@@ -29,48 +34,12 @@ const getNormalizedPath = () => {
 export const router = {
   handleRoute: () => {
     const path = getNormalizedPath();
-    const renderFn = routes[path] || routes["/"];
-    const container = document.getElementById("app");
 
-    if (container && typeof renderFn === "function") {
-      container.innerHTML = "";
-      renderFn(container);
-    }
-  },
-
-  navigateTo: (url) => {
-    const basePath = "/proyecto-tareas";
-
-    const targetUrl = url.startsWith(basePath)
-      ? url
-      : `${basePath}${url.startsWith("/") ? url : `/${url}`}`;
-
-    window.history.pushState({}, "", targetUrl);
-    router.handleRoute();
-  },
-
-  init: () => {
-    document.addEventListener("click", (e) => {
-      const link = e.target.closest("[data-link]");
-      if (link) {
-        e.preventDefault();
-        const targetUrl = link.getAttribute("href");
-        router.navigateTo(targetUrl);
-      }
-    });
-
-    window.addEventListener("popstate", () => {
-      router.handleRoute();
-    });
-
-    router.handleRoute();
-  },
-  handleRoute: () => {
-    const path = getNormalizedPath();
-    console.log("Ruta actual detectada:", path); // <-- LOG 1
+    console.log("Ruta actual detectada:", path);
 
     const renderFn = routes[path] || routes["/"];
-    console.log("Función de render a ejecutar:", renderFn); // <-- LOG 2
+
+    console.log("Función de render a ejecutar:", renderFn);
 
     const container = document.getElementById("app");
 
@@ -82,5 +51,37 @@ export const router = {
         "No se encontró el contenedor #app o renderFn no es función",
       );
     }
+  },
+
+  navigateTo: (url) => {
+    const basePath = "/proyecto-tareas";
+
+    const targetUrl = url.startsWith(basePath)
+      ? url
+      : `${basePath}${url.startsWith("/") ? url : `/${url}`}`;
+
+    window.history.pushState({}, "", targetUrl);
+
+    router.handleRoute();
+  },
+
+  init: () => {
+    document.addEventListener("click", (e) => {
+      const link = e.target.closest("[data-link]");
+
+      if (link) {
+        e.preventDefault();
+
+        const targetUrl = link.getAttribute("href");
+
+        router.navigateTo(targetUrl);
+      }
+    });
+
+    window.addEventListener("popstate", () => {
+      router.handleRoute();
+    });
+
+    router.handleRoute();
   },
 };
