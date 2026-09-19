@@ -30,9 +30,10 @@
    // Crear una nueva tarea
    $router->post('/api/tareas', ['TareaController', 'store']);
 
-   // Actualizar una tarea existente (por ID en la URL o en el body)
-   $router->put('/api/tareas/{id}', ['TareaController', 'update']);
-   $router->put('/api/tareas', ['TareaController', 'update']);
+   // Actualizar una tarea existente por ID
+   
+   $router->patch('/api/tareas/{id}', ['TareaController', 'update']);
+   
 
    // Eliminar una tarea por ID
    $router->delete('/api/tareas/{id}', ['TareaController', 'destroy']);

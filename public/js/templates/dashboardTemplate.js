@@ -34,7 +34,7 @@ export const dashboardTemplate = () => `
                         >
                             <span
                                 id="dashboardUserName"
-                                class="me-2 d-none d-lg-inline text-secondary small fw-bold"
+                               class="me-2 text-secondary small fw-bold"
                             >
                                 Usuario
                             </span>

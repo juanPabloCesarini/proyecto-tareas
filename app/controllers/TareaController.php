@@ -1,20 +1,28 @@
-<?php
-class TareaController extends BaseController {
 
+<?php
+
+class TareaController extends BaseController
+{
     private $tareaModel;
     private $estadoModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->tareaModel = $this->model('TareaModel');
         $this->estadoModel = $this->model('EstadoModel');
     }
 
     /**
-     * GET /TareaController/index/$id_estado
-     * Obtiene el listado de tareas filtrado por estado (0 = todas)
+     * GET /api/tareas
+     * GET /api/tareas/estado/{id_estado}
+     *
+     * Obtiene el listado de tareas del usuario autenticado.
+     * Si id_estado = 0, obtiene todas.
      */
-    public function index($id_estado = 0) {
+    public function index($id_estado = 0)
+    {
         $tareas = $this->tareaModel->buscarTareas($id_estado);
+
         $this->jsonResponse([
             'ok' => true,
             'tareas' => $tareas
@@ -22,11 +30,14 @@ class TareaController extends BaseController {
     }
 
     /**
-     * GET /TareaController/estados
-     * Obtiene la lista de estados disponibles para los select del front
+     * GET /api/estados
+     *
+     * Obtiene la lista de estados disponibles.
      */
-    public function estados() {
+    public function estados()
+    {
         $estados = $this->estadoModel->buscar_estados();
+
         $this->jsonResponse([
             'ok' => true,
             'estados' => $estados
@@ -34,15 +45,21 @@ class TareaController extends BaseController {
     }
 
     /**
-     * GET /TareaController/show/$id_tarea
-     * Obtiene el detalle de una tarea específica
+     * GET /api/tareas/{id_tarea}
+     *
+     * Obtiene el detalle de una tarea.
      */
-    public function show($id_tarea = null) {
+    public function show($id_tarea = null)
+    {
         if (!$id_tarea) {
-            $this->jsonResponse(['ok' => false, 'mensaje' => 'ID de tarea no proporcionado.'], 400);
+            $this->jsonResponse([
+                'ok' => false,
+                'mensaje' => 'ID de tarea no proporcionado.'
+            ], 400);
         }
 
         $tarea = $this->tareaModel->tareaById($id_tarea);
+
         $this->jsonResponse([
             'ok' => true,
             'tarea' => $tarea
@@ -50,86 +67,120 @@ class TareaController extends BaseController {
     }
 
     /**
-     * POST /TareaController/store
-     * Crea una nueva tarea y la asocia al usuario autenticado
+     * POST /api/tareas
+     *
+     * Crea una nueva tarea para el usuario autenticado.
      */
-    public function store() {
+    public function store()
+    {
         $datos = $this->getJsonBody();
 
+        if (empty($_SESSION['user_id'])) {
+            $this->jsonResponse([
+                'ok' => false,
+                'mensaje' => 'Usuario no autenticado.'
+            ], 401);
+        }
+
         $data = [
-            'titulo'      => trim($datos['titulo'] ?? ''),
+            'titulo' => trim($datos['titulo'] ?? ''),
             'descripcion' => trim($datos['descripcion'] ?? ''),
-            'expired_at'  => $datos['expired_at'] ?? null,
-            'id_estado'   => $datos['id_estado'] ?? 1,
+            'expired_at' => $datos['expired_at'] ?? null,
+            'id_estado' => $datos['id_estado'] ?? 1,
+            'id_usuario' => $_SESSION['user_id']
         ];
 
         if (empty($data['titulo'])) {
-            $this->jsonResponse(['ok' => false, 'mensaje' => 'El título es obligatorio.'], 400);
+            $this->jsonResponse([
+                'ok' => false,
+                'mensaje' => 'El título es obligatorio.'
+            ], 400);
         }
 
         $creado = $this->tareaModel->altaTarea($data);
 
         if ($creado) {
             $id_tarea = $this->tareaModel->ultimoId();
-            $dataUsuario = [
-                'id_usuario' => $_SESSION['id'] ?? $datos['id_usuario'],
-                'id_tarea'   => $id_tarea,
-            ];
-            $this->tareaModel->asignarTareaAlUsuario($dataUsuario);
 
             $this->jsonResponse([
                 'ok' => true,
-                'mensaje' => 'Tarea creada exitosamente.'
+                'mensaje' => 'Tarea creada exitosamente.',
+                'id_tarea' => $id_tarea
             ], 201);
-        } else {
-            $this->jsonResponse([
-                'ok' => false,
-                'mensaje' => 'No se pudo crear la tarea.'
-            ], 500);
         }
-    }
-
-    /**
-     * PUT /TareaController/update
-     * Actualiza los datos de una tarea existente
-     */
-    public function update() {
-        $datos = $this->getJsonBody();
-
-        $data = [
-            'titulo'      => trim($datos['titulo'] ?? ''),
-            'descripcion' => trim($datos['descripcion'] ?? ''),
-            'expired_at'  => $datos['expired_at'] ?? null,
-            'id_estado'   => $datos['id_estado'] ?? 1,
-            'id_tarea'    => $datos['id_tarea'] ?? null,
-        ];
-
-        if (empty($data['id_tarea'])) {
-            $this->jsonResponse(['ok' => false, 'mensaje' => 'ID de tarea no válido.'], 400);
-        }
-
-        $actualizado = $this->tareaModel->updateTarea($data);
 
         $this->jsonResponse([
-            'ok' => (bool)$actualizado,
-            'mensaje' => $actualizado ? 'Tarea actualizada correctamente.' : 'Sin cambios realizados.'
-        ]);
+            'ok' => false,
+            'mensaje' => 'No se pudo crear la tarea.'
+        ], 500);
     }
 
+/**
+ * PATCH /api/tareas/{id_tarea}
+ *
+ * Actualiza una tarea existente.
+ */
+public function update($id_tarea = null)
+{
+    if (!$id_tarea) {
+        $this->jsonResponse([
+            'ok' => false,
+            'mensaje' => 'ID de tarea no válido.'
+        ], 400);
+    }
+
+    $datos = $this->getJsonBody();
+
+    $data = [
+        'titulo' => trim($datos['titulo'] ?? ''),
+        'descripcion' => trim($datos['descripcion'] ?? ''),
+        'expired_at' => $datos['expired_at'] ?? null,
+        'id_estado' => $datos['id_estado'] ?? 1,
+        'id_tarea' => $id_tarea
+    ];
+
+    if (empty($data['titulo'])) {
+        $this->jsonResponse([
+            'ok' => false,
+            'mensaje' => 'El título es obligatorio.'
+        ], 400);
+    }
+
+    $actualizado =
+        $this->tareaModel->updateTarea($data);
+
+    $this->jsonResponse([
+        'ok' => (bool) $actualizado,
+        'mensaje' => $actualizado
+            ? 'Tarea actualizada correctamente.'
+            : 'Sin cambios realizados.'
+    ]);
+}
+
+
+
     /**
-     * DELETE /TareaController/destroy/$id_tarea
-     * Elimina (soft-delete) una tarea por su ID
+     * DELETE /api/tareas/{id_tarea}
+     *
+     * Elimina una tarea mediante soft-delete.
      */
-    public function destroy($id_tarea = null) {
+    public function destroy($id_tarea = null)
+    {
         if (!$id_tarea) {
-            $this->jsonResponse(['ok' => false, 'mensaje' => 'ID de tarea no provisto.'], 400);
+            $this->jsonResponse([
+                'ok' => false,
+                'mensaje' => 'ID de tarea no provisto.'
+            ], 400);
         }
 
         $eliminado = $this->tareaModel->eliminarTarea($id_tarea);
 
         $this->jsonResponse([
-            'ok' => (bool)$eliminado,
-            'mensaje' => $eliminado ? 'Tarea eliminada exitosamente.' : 'Error al intentar eliminar la tarea.'
+            'ok' => (bool) $eliminado,
+            'mensaje' => $eliminado
+                ? 'Tarea eliminada exitosamente.'
+                : 'Error al intentar eliminar la tarea.'
         ]);
     }
 }
+

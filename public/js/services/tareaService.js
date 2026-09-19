@@ -1,29 +1,41 @@
+
 import { httpClient } from "../utils/httpClient.js";
 
 export const tareaService = {
-  async getAll(statusId = 0) {
-    const query = statusId > 0 ? `?status=${statusId}` : "";
-    return await httpClient.get(`/api/tareas/${query}`);
-  },
+    async getEstados() {
+        return await httpClient("/api/estados");
+    },
 
-  async getById(id) {
-    return await httpClient.get(`/api/tareas/${id}`);
-  },
+    async getAll(statusId = 0) {
+        if (statusId > 0) {
+            return await httpClient(`/api/tareas/estado/${statusId}`);
+        }
 
-  async save(data) {
-    if (data.id) {
-      return await httpClient.put(`/api/tareas/${data.id}`, data);
-    }
-    return await httpClient.post("/api/tareas", data);
-  },
+        return await httpClient("/api/tareas");
+    },
 
-  async toggleStatus(id, newStatusId) {
-    return await httpClient.patch(`/api/tareas/${id}/status`, {
-      status_id: newStatusId,
-    });
-  },
+    async getById(id) {
+        return await httpClient(`/api/tareas/${id}`);
+    },
 
-  async delete(id) {
-    return await httpClient.delete(`/api/tareas/${id}`);
-  },
+    async create(data) {
+        return await httpClient("/api/tareas", {
+            method: "POST",
+            body: JSON.stringify(data),
+        });
+    },
+
+    async update(id, data) {
+        return await httpClient(`/api/tareas/${id}`, {
+            method: "PATCH",
+            body: JSON.stringify(data),
+        });
+    },
+
+    async delete(id) {
+        return await httpClient(`/api/tareas/${id}`, {
+            method: "DELETE",
+        });
+    },
 };
+
